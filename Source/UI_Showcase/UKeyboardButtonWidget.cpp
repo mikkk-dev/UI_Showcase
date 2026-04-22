@@ -30,6 +30,7 @@ void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 			if (bIsKeyPressed)
 			{
 				PlayAnimation(GoDown);
+				PlaySound(SoundToPlay);
 			}
 			else
 			{

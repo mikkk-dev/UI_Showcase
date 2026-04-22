@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start Values")
 	FKey KeyToCheck;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start Values")
+	USoundBase* SoundToPlay;
+
 
 
 
