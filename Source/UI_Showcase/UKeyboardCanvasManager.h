@@ -22,10 +22,22 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextField;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TextFieldGray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Words To Use")
+	UDataTable* WordsStruct;
+
+	TArray<FString> AvailableWords;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
 	void PrintLetter(FString);
+	void SetupButtons();
+	void LoadWordsFromStruct();
+
+	FString GetRandomWord();
 
 	virtual void NativeConstruct() override;
 };

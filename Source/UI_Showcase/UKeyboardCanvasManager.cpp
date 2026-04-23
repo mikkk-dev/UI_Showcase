@@ -9,13 +9,71 @@
 void UKeyboardCanvasManager::NativeConstruct() 
 {
 	Super::NativeConstruct();
+	SetupButtons();
+	LoadWordsFromStruct();
 
-	if (GEngine)
+	TextField->SetText(FText::FromString(""));
+	TextFieldGray->SetText(FText::FromString(""));
+
+	FString WordsToAdd = GetRandomWord();
+	for (size_t i = 0; i < 50; i++)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("PrintLetter called!"));
+		WordsToAdd += " " + GetRandomWord();
+	}
+	
+	TextFieldGray->SetText(FText::FromString(WordsToAdd));
+}
+
+
+FString UKeyboardCanvasManager::GetRandomWord()
+{
+	if (AvailableWords.Num() > 0)
+	{
+		return AvailableWords[FMath::RandRange(0, AvailableWords.Num() - 1)];
 	}
 
-	TextField->SetText(FText::FromString(" "));
+	return "";
+}
+
+
+void UKeyboardCanvasManager::LoadWordsFromStruct()
+{
+	if (WordsStruct)
+	{
+		// Unreal when importing a CSV changes the Property Name to make it unique
+		// This gets that property's name in the actual struct
+		FName RealPropertyName;
+		const UScriptStruct* RowStruct = WordsStruct->GetRowStruct();
+		if (RowStruct)
+		{
+			for (TFieldIterator<FProperty> PropIt(RowStruct); PropIt; ++PropIt)
+			{
+				FProperty* Property = *PropIt;
+				RealPropertyName = *Property->GetName();
+			}
+		}
+
+		// This adds all of the values to AvailableWords 
+		TArray<FName> RowNames = WordsStruct->GetRowNames();
+		FProperty* WordProp = WordsStruct->GetRowStruct()->FindPropertyByName(RealPropertyName);
+		if (WordProp && WordProp->IsA<FStrProperty>())
+		{
+			for (const FName& RowName : RowNames)
+			{
+				uint8* RowPtr = WordsStruct->FindRowUnchecked(RowName);
+				if (RowPtr)
+				{
+					FString WordValue = CastFieldChecked<FStrProperty>(WordProp)->GetOptionalPropertyValue_InContainer(RowPtr);
+					AvailableWords.Add(WordValue);
+				}
+			}
+		}
+	}
+}
+
+
+void UKeyboardCanvasManager::SetupButtons() 
+{
 	KeyboardButtonsArr.Empty();
 
 	TArray<UWidget*> AllWidgets;
