@@ -10,12 +10,17 @@
 /**
  * 
  */
+
+DECLARE_DELEGATE_OneParam(FLetterSendDelegate, FString);
+
+
 UCLASS()
 class UI_SHOWCASE_API UKeyboardButtonWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
 public:
+	FLetterSendDelegate LetterSendDelegate;
 
 
 protected:
@@ -31,14 +36,17 @@ protected:
 	TObjectPtr<UWidgetAnimation> GoDown;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start Values")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	UTexture2D* TextureToApply;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start Values")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	FKey KeyToCheck;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start Values")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	USoundBase* SoundToPlay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
+	FString LetterToSend;
 
 
 

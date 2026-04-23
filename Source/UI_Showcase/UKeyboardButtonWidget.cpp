@@ -29,6 +29,7 @@ void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 		{
 			if (bIsKeyPressed)
 			{
+				LetterSendDelegate.ExecuteIfBound(LetterToSend);
 				PlayAnimation(GoDown);
 				PlaySound(SoundToPlay);
 			}
