@@ -21,6 +21,9 @@ void UKeyboardCanvasManager::NativeConstruct()
 
 void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
 {
+	APlayerController* PlayerController = GetOwningPlayer();
+	PlayerController->SetShowMouseCursor(true);
+
 	TextField->SetText(FText::FromString(""));
 	TextFieldGray->SetText(FText::FromString(""));
 	TextFieldRed->SetText(FText::FromString(""));
@@ -188,6 +191,7 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 			CurrentSpaceIndex++;
 		}
 		NewText = CurrentText + KeyStr;
+		WordsCount++;
 		// if the previous word wasnt fully filled, it fills it with spaces
 		while (NewText.Len() <= SpaceIndexes[CurrentSpaceIndex -1])
 		{
@@ -281,11 +285,20 @@ void UKeyboardCanvasManager::UpdateTimer()
 	CountDownTextBlock->SetText(FText::FromString(FString::FromInt(CountDownValue)));
 	CountDownValue--;
 
-	if (CountDownValue < 0) {
-
+	if (CountDownValue < 0) 
+	{
 		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 		TimerManager.ClearTimer(CountDownTimerHandle);
 		UE_LOG(LogTemp, Warning, TEXT("Hello World"));
 	}
+}
+
+
+void UKeyboardCanvasManager::UpdateUIValues()
+{
+	WordsTextBlock->SetText(FText::FromString(FString::FromInt(WordsCount)));
+	TyposTextBlock->SetText(FText::FromString(FString::FromInt(TyposCount)));
+	WPMTextBlock->SetText(FText::FromString(FString::FromInt(WPMValue)));
+	AccuracyTextBlock->SetText(FText::FromString(FString::FromInt(AccuracyValue)));
 }
 

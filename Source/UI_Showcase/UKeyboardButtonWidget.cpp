@@ -50,11 +50,11 @@ void UKeyboardButtonWidget::HighlightIfExpected(FString Key)
 {
 	if (Key != LetterToSend)
 	{
-		BtnImage->SetOpacity(0.5f);
+		BtnImage->SetColorAndOpacity(FLinearColor(0.7f, 0.7f, 0.7f, 0.5f));
 	}
 	else
 	{
-		BtnImage->SetOpacity(1.0f);
+		BtnImage->SetColorAndOpacity(FLinearColor(0.333f, 0.177f, 1.0f, 1.0f));
 	}
 
 }

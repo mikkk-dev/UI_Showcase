@@ -31,6 +31,19 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* CountDownTextBlock;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* WordsTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TyposTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* WPMTextBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AccuracyTextBlock;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	UDataTable* WordsStruct;
 
@@ -56,6 +69,14 @@ protected:
 	FTimerHandle CountDownTimerHandle;
 	int32 CountDownValue;
 
+	int32 WordsCount;
+	int32 TyposCount;
+	int32 WPMValue;
+	int32 AccuracyValue;
+
+	int32 LettersTyped;
+	int32 CorrectLetters;
+
 	void PrintLetter(FString, bool);
 	void SetupButtons();
 	void LoadWordsFromStruct();
@@ -64,6 +85,7 @@ protected:
 	void UpdateTextFieldRed();
 	void RestartTimer();
 	void UpdateTimer();
+	void UpdateUIValues();
 
 	FString GetRandomWord();
 
