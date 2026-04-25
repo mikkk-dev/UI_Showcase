@@ -189,6 +189,8 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 		if (CurrentSpaceIndex < SpaceIndexes.Num())
 		{
 			CurrentSpaceIndex++;
+			LettersTyped++;
+			CorrectLetters++;
 		}
 		NewText = CurrentText + KeyStr;
 		WordsCount++;
@@ -196,6 +198,7 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 		while (NewText.Len() <= SpaceIndexes[CurrentSpaceIndex -1])
 		{
 			NewText += KeyStr;
+			LettersTyped++;
 		}
 
 		if (NewLineIndexes.Contains(SpaceIndexes[CurrentSpaceIndex -1]))
@@ -203,7 +206,7 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 			NewText += "\n";
 		}
 	}
-	else
+	else // any other character
 	{
 		if (CurrentSpaceIndex >= SpaceIndexes.Num() || // prevent index out of bounds
 			CurrentText.Len() >= SpaceIndexes[CurrentSpaceIndex]) // prevent typing letters than the current word 
@@ -212,9 +215,12 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 		}
 		else
 		{
+			LettersTyped++;
+			// czy zgadza sie z tekstem do napisania
 			if (TextToType[TextLength] == KeyStr[0])
 			{
 				NewText = CurrentText + KeyStr;
+				CorrectLetters++;
 			}
 			else
 			{
@@ -227,9 +233,14 @@ void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed)
 
 	TextLength = TextField->GetText().ToString().Len();
 	ExpectedLetterIndex = TextLength -1; // beacuse it adds an underscore
+	if (ExpectedLetterIndex >= TextToType.Len())
+	{
+		return;
+	}
 	HighlightExpectedKey(TextToType.GetCharArray()[ExpectedLetterIndex]);
 		
 	UpdateTextFieldRed();
+	UpdateUIValues();
 }
 
 
@@ -251,6 +262,8 @@ void UKeyboardCanvasManager::UpdateTextFieldRed()
 	TArray<TCHAR> TypedChars = TypedString.GetCharArray();
 
 	FString TextToApply = "";
+	TyposCount = 0;
+
 	for (size_t i = 0; i < TypedChars.Num() - 2; i++) // minus the underscore and a blank
 	{
 		if (TypedChars[i] == '\n') {
@@ -265,6 +278,7 @@ void UKeyboardCanvasManager::UpdateTextFieldRed()
 			else
 			{
 				TextToApply += TextToType[i];
+				TyposCount++;
 			}
 		}
 	}
@@ -298,7 +312,18 @@ void UKeyboardCanvasManager::UpdateUIValues()
 {
 	WordsTextBlock->SetText(FText::FromString(FString::FromInt(WordsCount)));
 	TyposTextBlock->SetText(FText::FromString(FString::FromInt(TyposCount)));
+
+	int32 TimePassed = 30 - CountDownValue;
+	if (TimePassed > 0)
+	{
+		WPMValue = (WordsCount / float(TimePassed)) * 60;
+	}
 	WPMTextBlock->SetText(FText::FromString(FString::FromInt(WPMValue)));
-	AccuracyTextBlock->SetText(FText::FromString(FString::FromInt(AccuracyValue)));
+	
+	if (LettersTyped > 0)
+	{
+		AccuracyValue = (CorrectLetters / float(LettersTyped)) * 100;
+	}
+	AccuracyTextBlock->SetText(FText::FromString(FString::FromInt(AccuracyValue) + "%"));
 }
 

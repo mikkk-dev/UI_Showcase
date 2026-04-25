@@ -62,7 +62,7 @@ protected:
 	float LetterWidth;
 	
 	FString TextToType;
-	uint32 ExpectedLetterIndex;
+	int32 ExpectedLetterIndex;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
