@@ -19,12 +19,14 @@ class UI_SHOWCASE_API UKeyboardCanvasManager : public UUserWidget
 public:
 
 protected:
-
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextField;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextFieldGray;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TextFieldRed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Words To Use")
 	UDataTable* WordsStruct;
@@ -47,7 +49,7 @@ protected:
 	void LoadWordsFromStruct();
 	void GenerateWordsToType(int32);
 	void HighlightExpectedKey(char);
-	void CalculateLetterWidth();
+	void UpdateTextFieldRed();
 
 	FString GetRandomWord();
 
