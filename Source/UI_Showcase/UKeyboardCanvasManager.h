@@ -35,6 +35,7 @@ protected:
 	uint32 CurrentSpaceIndex;
 	
 	FString TextToType;
+	uint32 ExpectedLetterIndex;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
@@ -42,6 +43,7 @@ protected:
 	void SetupButtons();
 	void LoadWordsFromStruct();
 	void GenerateWordsToType(int32);
+	void HighlightExpectedKey(char);
 
 	FString GetRandomWord();
 

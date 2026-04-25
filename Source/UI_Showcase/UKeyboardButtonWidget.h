@@ -22,6 +22,7 @@ class UI_SHOWCASE_API UKeyboardButtonWidget : public UUserWidget
 public:
 	FLetterSendDelegate LetterSendDelegate;
 
+	void HighlightIfExpected(FString);
 
 protected:
 	bool bWasKeyPressed;
@@ -47,7 +48,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	FString LetterToSend;
-
 
 
 

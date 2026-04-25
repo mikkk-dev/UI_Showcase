@@ -22,9 +22,10 @@ void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
 	TextFieldGray->SetText(FText::FromString(""));
 	SpaceIndexes.Empty();
 	CurrentSpaceIndex = 0;
+	ExpectedLetterIndex = 0;
 
 	TextToType = GetRandomWord();
-	int LetterIndex = 0;
+
 	for (size_t i = 0; i < Count; i++)
 	{
 		SpaceIndexes.Add(TextToType.Len());
@@ -111,6 +112,7 @@ void UKeyboardCanvasManager::PrintLetter(FString Letter, bool bIsCtrlPressed)
 			.LeftChop(1); // remove the _ from the end
 		int TextLength = CurrentText.Len();
 		FString NewText;
+		
 
 		if (Letter == TEXT("BACKSPACE"))
 		{
@@ -161,5 +163,23 @@ void UKeyboardCanvasManager::PrintLetter(FString Letter, bool bIsCtrlPressed)
 		}
 
 		TextField->SetText(FText::FromString(NewText + "_"));
+
+		TextLength = TextField->GetText().ToString().Len();
+		ExpectedLetterIndex = TextLength -1; // beacuse it adds an underscore
+		HighlightExpectedKey(TextToType.GetCharArray()[ExpectedLetterIndex]);
 	}
 }
+
+
+void UKeyboardCanvasManager::HighlightExpectedKey(char Character)
+{
+	TCHAR TCharacter = (TCHAR)Character;
+	FString FCharacter(1, &TCharacter);
+
+	for (auto& KeyboardButton : KeyboardButtonsArr)
+	{
+		KeyboardButton->HighlightIfExpected(FCharacter);
+	}
+}
+
+

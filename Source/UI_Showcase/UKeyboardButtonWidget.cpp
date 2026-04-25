@@ -44,3 +44,18 @@ void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 		bWasKeyPressed = bIsKeyPressed;
 	}
 }
+
+
+void UKeyboardButtonWidget::HighlightIfExpected(FString Key)
+{
+	if (Key != LetterToSend)
+	{
+		BtnImage->SetOpacity(0.5f);
+	}
+	else
+	{
+		BtnImage->SetOpacity(1.0f);
+	}
+
+}
+
