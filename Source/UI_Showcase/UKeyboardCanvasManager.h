@@ -32,7 +32,10 @@ protected:
 	TArray<FString> AvailableWords;
 
 	TArray<int32> SpaceIndexes;
-	uint32 CurrentSpaceIndex;
+	int32 CurrentSpaceIndex;
+	TArray<int32> NewLineIndexes;
+
+	float LetterWidth;
 	
 	FString TextToType;
 	uint32 ExpectedLetterIndex;
@@ -44,6 +47,7 @@ protected:
 	void LoadWordsFromStruct();
 	void GenerateWordsToType(int32);
 	void HighlightExpectedKey(char);
+	void CalculateLetterWidth();
 
 	FString GetRandomWord();
 
