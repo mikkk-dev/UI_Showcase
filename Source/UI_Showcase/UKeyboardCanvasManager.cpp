@@ -12,7 +12,10 @@ void UKeyboardCanvasManager::NativeConstruct()
 	Super::NativeConstruct();
 	SetupButtons();
 	LoadWordsFromStruct();
-	GenerateWordsToType(50);
+	GenerateWordsToType(WordsToTypeCount);
+	RestartTimer();
+
+	HighlightExpectedKey(TextToType[0]);
 }
 
 
@@ -26,7 +29,6 @@ void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
 	NewLineIndexes.Empty();
 	CurrentSpaceIndex = 0;
 	ExpectedLetterIndex = 0;
-	int32 NewLineThreshold = 60;
 
 	TextToType = GetRandomWord();
 	int32 LineWidthCounter = TextToType.Len();
@@ -232,8 +234,6 @@ void UKeyboardCanvasManager::HighlightExpectedKey(char Character)
 	TCHAR TCharacter = (TCHAR)Character;
 	FString FCharacter(1, &TCharacter);
 
-	UE_LOG(LogTemp, Warning, TEXT("letter %s"), *FCharacter);
-
 	for (auto& KeyboardButton : KeyboardButtonsArr)
 	{
 		KeyboardButton->HighlightIfExpected(FCharacter);
@@ -267,4 +267,25 @@ void UKeyboardCanvasManager::UpdateTextFieldRed()
 	TextFieldRed->SetText(FText::FromString(TextToApply));
 }
 
+
+void UKeyboardCanvasManager::RestartTimer()
+{
+	CountDownValue = 30;
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	TimerManager.SetTimer(CountDownTimerHandle, this, &UKeyboardCanvasManager::UpdateTimer, 1, true, 0);
+}
+
+
+void UKeyboardCanvasManager::UpdateTimer()
+{
+	CountDownTextBlock->SetText(FText::FromString(FString::FromInt(CountDownValue)));
+	CountDownValue--;
+
+	if (CountDownValue < 0) {
+
+		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+		TimerManager.ClearTimer(CountDownTimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("Hello World"));
+	}
+}
 

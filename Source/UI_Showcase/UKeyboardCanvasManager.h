@@ -28,8 +28,17 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TextFieldRed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Words To Use")
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CountDownTextBlock;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	UDataTable* WordsStruct;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
+	int32 NewLineThreshold;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
+	int32 WordsToTypeCount;
 
 	TArray<FString> AvailableWords;
 
@@ -44,12 +53,17 @@ protected:
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
+	FTimerHandle CountDownTimerHandle;
+	int32 CountDownValue;
+
 	void PrintLetter(FString, bool);
 	void SetupButtons();
 	void LoadWordsFromStruct();
 	void GenerateWordsToType(int32);
 	void HighlightExpectedKey(char);
 	void UpdateTextFieldRed();
+	void RestartTimer();
+	void UpdateTimer();
 
 	FString GetRandomWord();
 
