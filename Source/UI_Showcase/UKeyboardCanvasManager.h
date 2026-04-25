@@ -30,10 +30,11 @@ protected:
 	UDataTable* WordsStruct;
 
 	TArray<FString> AvailableWords;
+	TArray<int32> SpaceIndexes;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
-	void PrintLetter(FString);
+	void PrintLetter(FString, bool);
 	void SetupButtons();
 	void LoadWordsFromStruct();
 

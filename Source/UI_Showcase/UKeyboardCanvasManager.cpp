@@ -94,7 +94,7 @@ void UKeyboardCanvasManager::SetupButtons()
 }
 
 
-void UKeyboardCanvasManager::PrintLetter(FString letter) 
+void UKeyboardCanvasManager::PrintLetter(FString letter, bool bIsCtrlPressed) 
 {
 	if (TextField) {
 		FString CurrentText = TextField->GetText().ToString();
@@ -103,6 +103,10 @@ void UKeyboardCanvasManager::PrintLetter(FString letter)
 
 		if (letter == TEXT("BACKSPACE"))
 		{
+			if (bIsCtrlPressed)
+			{
+
+			}
 			NewText = CurrentText.LeftChop(1);
 		}
 		else if (letter == TEXT("SHIFT"))

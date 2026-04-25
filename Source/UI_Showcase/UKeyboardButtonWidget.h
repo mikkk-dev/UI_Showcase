@@ -11,7 +11,7 @@
  * 
  */
 
-DECLARE_DELEGATE_OneParam(FLetterSendDelegate, FString);
+DECLARE_DELEGATE_TwoParams(FLetterSendDelegate, FString /* letter to send */, bool /* is Ctrl Pressed */);
 
 
 UCLASS()

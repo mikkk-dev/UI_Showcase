@@ -24,12 +24,14 @@ void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 	if (APlayerController* PC = GetOwningPlayer())
 	{
 		bool bIsKeyPressed = PC->IsInputKeyDown(KeyToCheck);
+		bool bIsShiftPressed = PC->IsInputKeyDown(EKeys::LeftShift) || PC->IsInputKeyDown(EKeys::RightShift);
+		bool bIsCtrlPressed = PC->IsInputKeyDown(EKeys::LeftControl) || PC->IsInputKeyDown(EKeys::RightControl);
 		
 		if (bWasKeyPressed != bIsKeyPressed)
 		{
 			if (bIsKeyPressed)
 			{
-				LetterSendDelegate.ExecuteIfBound(LetterToSend);
+				LetterSendDelegate.ExecuteIfBound(bIsShiftPressed ? LetterToSend.ToUpper() : LetterToSend, bIsCtrlPressed);
 				PlayAnimation(GoDown);
 				PlaySound(SoundToPlay);
 			}
