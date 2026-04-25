@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UKeyboardButtonWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/BackgroundBlur.h"
 #include "UKeyboardCanvasManager.generated.h"
 
 /**
@@ -43,6 +44,12 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AccuracyTextBlock;
 
+	UPROPERTY(meta = (BindWidget))
+	UBackgroundBlur* BlurPanel;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation> BlurOut;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	UDataTable* WordsStruct;
@@ -52,6 +59,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
 	int32 WordsToTypeCount;
+
 
 	TArray<FString> AvailableWords;
 
@@ -68,6 +76,7 @@ protected:
 
 	FTimerHandle CountDownTimerHandle;
 	int32 CountDownValue;
+	bool bIsCountDownTimerRunning = false;
 
 	int32 WordsCount;
 	int32 TyposCount;
@@ -83,7 +92,7 @@ protected:
 	void GenerateWordsToType(int32);
 	void HighlightExpectedKey(char);
 	void UpdateTextFieldRed();
-	void RestartTimer();
+	void RestartTimer(int32, int32);
 	void UpdateTimer();
 	void UpdateUIValues();
 

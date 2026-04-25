@@ -13,7 +13,6 @@ void UKeyboardCanvasManager::NativeConstruct()
 	SetupButtons();
 	LoadWordsFromStruct();
 	GenerateWordsToType(WordsToTypeCount);
-	RestartTimer();
 
 	HighlightExpectedKey(TextToType[0]);
 }
@@ -132,6 +131,18 @@ void UKeyboardCanvasManager::SetupButtons()
 
 void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed) 
 {
+	if (!bIsCountDownTimerRunning)
+	{
+		bIsCountDownTimerRunning = true;
+		PlayAnimation(BlurOut);
+		RestartTimer(30, 1);
+	}
+
+	if (CountDownValue < 0)
+	{
+		return;
+	}
+
 	FString CurrentText = TextField->GetText().ToString()
 		.LeftChop(1); // remove the _ from the end
 	int TextLength = CurrentText.Len();
@@ -286,11 +297,11 @@ void UKeyboardCanvasManager::UpdateTextFieldRed()
 }
 
 
-void UKeyboardCanvasManager::RestartTimer()
+void UKeyboardCanvasManager::RestartTimer(int32 FullTime, int32 Delay)
 {
-	CountDownValue = 30;
+	CountDownValue = FullTime;
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-	TimerManager.SetTimer(CountDownTimerHandle, this, &UKeyboardCanvasManager::UpdateTimer, 1, true, 0);
+	TimerManager.SetTimer(CountDownTimerHandle, this, &UKeyboardCanvasManager::UpdateTimer, 1, true, Delay);
 }
 
 
