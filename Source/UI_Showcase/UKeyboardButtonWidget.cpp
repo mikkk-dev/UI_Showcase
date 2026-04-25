@@ -10,7 +10,7 @@ void UKeyboardButtonWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	bWasKeyPressed = false;
-
+	bIsEnabled = true;
 
 	if (BtnImage) {
 		BtnImage->SetBrushFromTexture(TextureToApply);
@@ -20,6 +20,11 @@ void UKeyboardButtonWidget::NativeConstruct()
 void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	if (!bIsEnabled)
+	{
+		return;
+	}
 
 	if (APlayerController* PC = GetOwningPlayer())
 	{
@@ -56,6 +61,13 @@ void UKeyboardButtonWidget::HighlightIfExpected(FString Key)
 	{
 		BtnImage->SetColorAndOpacity(FLinearColor(0.333f, 0.177f, 1.0f, 1.0f));
 	}
+
+}
+
+
+void UKeyboardButtonWidget::SetEnabled(bool Enabled)
+{
+	bIsEnabled = Enabled;
 
 }
 

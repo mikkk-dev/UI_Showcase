@@ -129,13 +129,23 @@ void UKeyboardCanvasManager::SetupButtons()
 }
 
 
+void UKeyboardCanvasManager::SetEnabledButtons(bool Enabled)
+{
+	for (auto& Btn : KeyboardButtonsArr)
+	{
+		Btn->SetEnabled(Enabled);
+	}
+}
+
+
 void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed) 
 {
 	if (!bIsCountDownTimerRunning)
 	{
 		bIsCountDownTimerRunning = true;
 		PlayAnimation(BlurOut);
-		RestartTimer(30, 1);
+		RestartTimer(15, 1);
+		return;
 	}
 
 	if (CountDownValue < 0)
@@ -314,6 +324,7 @@ void UKeyboardCanvasManager::UpdateTimer()
 	{
 		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 		TimerManager.ClearTimer(CountDownTimerHandle);
+		SetEnabledButtons(false);
 		UE_LOG(LogTemp, Warning, TEXT("Hello World"));
 	}
 }
@@ -324,7 +335,7 @@ void UKeyboardCanvasManager::UpdateUIValues()
 	WordsTextBlock->SetText(FText::FromString(FString::FromInt(WordsCount)));
 	TyposTextBlock->SetText(FText::FromString(FString::FromInt(TyposCount)));
 
-	int32 TimePassed = 30 - CountDownValue;
+	int32 TimePassed = 15 - CountDownValue;
 	if (TimePassed > 0)
 	{
 		WPMValue = (WordsCount / float(TimePassed)) * 60;

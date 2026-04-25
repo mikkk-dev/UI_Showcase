@@ -7,6 +7,7 @@
 #include "UKeyboardButtonWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/BackgroundBlur.h"
+#include "Components/Border.h"
 #include "UKeyboardCanvasManager.generated.h"
 
 /**
@@ -46,6 +47,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UBackgroundBlur* BlurPanel;
+
+	UPROPERTY(meta = (BindWidget))
+	UBorder* WPMHoverArea;
 
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation> BlurOut;
@@ -88,6 +92,7 @@ protected:
 
 	void PrintLetter(FString, bool);
 	void SetupButtons();
+	void SetEnabledButtons(bool);
 	void LoadWordsFromStruct();
 	void GenerateWordsToType(int32);
 	void HighlightExpectedKey(char);

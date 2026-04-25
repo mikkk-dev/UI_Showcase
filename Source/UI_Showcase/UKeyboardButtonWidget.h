@@ -23,9 +23,11 @@ public:
 	FLetterSendDelegate LetterSendDelegate;
 
 	void HighlightIfExpected(FString);
+	void SetEnabled(bool);
 
 protected:
 	bool bWasKeyPressed;
+	bool bIsEnabled;
 
 	UPROPERTY(meta = (BindWidget))
 	UImage* BtnImage;
