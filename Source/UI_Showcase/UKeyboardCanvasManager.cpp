@@ -3,6 +3,7 @@
 
 #include "UKeyboardCanvasManager.h"
 #include "Components/PanelWidget.h"
+#include "Logging/LogMacros.h"
 #include "Blueprint/WidgetTree.h"
 
 
@@ -11,17 +12,28 @@ void UKeyboardCanvasManager::NativeConstruct()
 	Super::NativeConstruct();
 	SetupButtons();
 	LoadWordsFromStruct();
+	GenerateWordsToType(50);
+}
 
+
+void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
+{
 	TextField->SetText(FText::FromString(""));
 	TextFieldGray->SetText(FText::FromString(""));
+	SpaceIndexes.Empty();
+	CurrentSpaceIndex = 0;
 
 	FString WordsToAdd = GetRandomWord();
-	for (size_t i = 0; i < 50; i++)
+	int LetterIndex = 0;
+	for (size_t i = 0; i < Count; i++)
 	{
+		SpaceIndexes.Add(WordsToAdd.Len());
 		WordsToAdd += " " + GetRandomWord();
 	}
-	
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s"));
 	TextFieldGray->SetText(FText::FromString(WordsToAdd));
+	
 }
 
 
@@ -94,31 +106,61 @@ void UKeyboardCanvasManager::SetupButtons()
 }
 
 
-void UKeyboardCanvasManager::PrintLetter(FString letter, bool bIsCtrlPressed) 
+void UKeyboardCanvasManager::PrintLetter(FString Letter, bool bIsCtrlPressed) 
 {
 	if (TextField) {
-		FString CurrentText = TextField->GetText().ToString();
+		FString CurrentText = TextField->GetText().ToString()
+			.LeftChop(1); // remove the _ from the end
 		int TextLength = CurrentText.Len();
 		FString NewText;
 
-		if (letter == TEXT("BACKSPACE"))
+		if (Letter == TEXT("BACKSPACE"))
 		{
-			if (bIsCtrlPressed)
-			{
-
-			}
+			UE_LOG(LogTemp, Warning, TEXT("%s"), (bIsCtrlPressed ? TEXT("true") : TEXT("false")));
 			NewText = CurrentText.LeftChop(1);
+
+			if (CurrentSpaceIndex > 0)
+			{
+				int32 Diff = TextLength - SpaceIndexes[CurrentSpaceIndex - 1]; // not removing the space
+
+				if (bIsCtrlPressed)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("%d"), Diff);
+					NewText = CurrentText.LeftChop(Diff) + " ";
+				}
+				else if (NewText.Len() <= SpaceIndexes[CurrentSpaceIndex - 1])
+				{
+					NewText = CurrentText.LeftChop(Diff) + " ";
+					UE_LOG(LogTemp, Warning, TEXT("NewText %d PrevIndex %d"), NewText.Len(), SpaceIndexes[CurrentSpaceIndex - 1]);
+				}
+			}
+			else if (bIsCtrlPressed)
+			{
+				NewText = "";
+			}
 		}
-		else if (letter == TEXT("SHIFT"))
+		else if (Letter == TEXT("SHIFT"))
 		{
 			return;
 		}
+		else if (Letter == TEXT(" "))
+		{
+			CurrentSpaceIndex++;
+			NewText = CurrentText + Letter;
+
+		}
 		else
 		{
-			NewText = CurrentText + letter;
+			if (CurrentText.Len() < SpaceIndexes[CurrentSpaceIndex])
+			{
+				NewText = CurrentText + Letter;
+			}
+			else
+			{
+				NewText = CurrentText;
+			}
 		}
 
-
-		TextField->SetText(FText::FromString(NewText));
+		TextField->SetText(FText::FromString(NewText + "_"));
 	}
 }

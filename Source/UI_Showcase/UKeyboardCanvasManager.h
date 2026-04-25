@@ -31,12 +31,15 @@ protected:
 
 	TArray<FString> AvailableWords;
 	TArray<int32> SpaceIndexes;
+
+	int32 CurrentSpaceIndex;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
 	void PrintLetter(FString, bool);
 	void SetupButtons();
 	void LoadWordsFromStruct();
+	void GenerateWordsToType(int32);
 
 	FString GetRandomWord();
 
