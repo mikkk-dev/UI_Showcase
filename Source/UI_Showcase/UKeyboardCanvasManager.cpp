@@ -23,17 +23,15 @@ void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
 	SpaceIndexes.Empty();
 	CurrentSpaceIndex = 0;
 
-	FString WordsToAdd = GetRandomWord();
+	TextToType = GetRandomWord();
 	int LetterIndex = 0;
 	for (size_t i = 0; i < Count; i++)
 	{
-		SpaceIndexes.Add(WordsToAdd.Len());
-		WordsToAdd += " " + GetRandomWord();
+		SpaceIndexes.Add(TextToType.Len());
+		TextToType += " " + GetRandomWord();
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("%s"));
-	TextFieldGray->SetText(FText::FromString(WordsToAdd));
-	
+	TextFieldGray->SetText(FText::FromString(TextToType));
 }
 
 
@@ -116,24 +114,21 @@ void UKeyboardCanvasManager::PrintLetter(FString Letter, bool bIsCtrlPressed)
 
 		if (Letter == TEXT("BACKSPACE"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), (bIsCtrlPressed ? TEXT("true") : TEXT("false")));
 			NewText = CurrentText.LeftChop(1);
 
+			// so that the previos index is not -1
 			if (CurrentSpaceIndex > 0)
 			{
 				int32 Diff = TextLength - SpaceIndexes[CurrentSpaceIndex - 1]; // not removing the space
 
-				if (bIsCtrlPressed)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("%d"), Diff);
-					NewText = CurrentText.LeftChop(Diff) + " ";
-				}
-				else if (NewText.Len() <= SpaceIndexes[CurrentSpaceIndex - 1])
+				// removes the full up to the previous space
+				if (bIsCtrlPressed ||  // if ctrl is pressed
+					NewText.Len() <= SpaceIndexes[CurrentSpaceIndex - 1]) // if the previous chop went too far
 				{
 					NewText = CurrentText.LeftChop(Diff) + " ";
-					UE_LOG(LogTemp, Warning, TEXT("NewText %d PrevIndex %d"), NewText.Len(), SpaceIndexes[CurrentSpaceIndex - 1]);
 				}
 			}
+			// clears the first word
 			else if (bIsCtrlPressed)
 			{
 				NewText = "";
@@ -147,7 +142,11 @@ void UKeyboardCanvasManager::PrintLetter(FString Letter, bool bIsCtrlPressed)
 		{
 			CurrentSpaceIndex++;
 			NewText = CurrentText + Letter;
-
+			// if the previous word wasnt fully filled, it fills it with spaces
+			while (NewText.Len() <= SpaceIndexes[CurrentSpaceIndex -1])
+			{
+				NewText += Letter;
+			}
 		}
 		else
 		{

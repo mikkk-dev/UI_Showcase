@@ -30,9 +30,11 @@ protected:
 	UDataTable* WordsStruct;
 
 	TArray<FString> AvailableWords;
-	TArray<int32> SpaceIndexes;
 
-	int32 CurrentSpaceIndex;
+	TArray<int32> SpaceIndexes;
+	uint32 CurrentSpaceIndex;
+	
+	FString TextToType;
 	
 	TArray<UKeyboardButtonWidget*> KeyboardButtonsArr;
 
