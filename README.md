@@ -15,3 +15,9 @@ Right now it features a Level called _KeyboardMap.umap_ and when you play it a s
 - Binding to text to the current word untill a space is pressed
 - Sound and key animation when typing
 
+### The important files:
+The code I wrote is in these 4 files:
+[Source/UI_Showcase/UKeyboardCanvasManager.h](https://github.com/mikkk-dev/UI_Showcase/blob/main/Source/UI_Showcase/UKeyboardCanvasManager.h)
+[Source/UI_Showcase/UKeyboardCanvasManager.cpp](https://github.com/mikkk-dev/UI_Showcase/blob/main/Source/UI_Showcase/UKeyboardCanvasManager.cpp)
+[Source/UI_Showcase/UKeyboardButtonWidget.h](https://github.com/mikkk-dev/UI_Showcase/blob/main/Source/UI_Showcase/UKeyboardButtonWidget.h)
+[Source/UI_Showcase/UKeyboardButtonWidget.cpp](https://github.com/mikkk-dev/UI_Showcase/blob/main/Source/UI_Showcase/UKeyboardButtonWidget.cpp)
