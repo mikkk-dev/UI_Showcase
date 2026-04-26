@@ -10,11 +10,42 @@
 void UKeyboardCanvasManager::NativeConstruct() 
 {
 	Super::NativeConstruct();
+	ResetButton->OnClicked.AddDynamic(this, &UKeyboardCanvasManager::OnResetButtonClicked);
 	SetupButtons();
 	LoadWordsFromStruct();
 	GenerateWordsToType(WordsToTypeCount);
 
 	HighlightExpectedKey(TextToType[0]);
+}
+
+
+void UKeyboardCanvasManager::ResetAllData()
+{
+	PlayAnimation(ResetBlur);
+	WordsCount = 0;
+	TyposCount = 0;
+	WPMValue = 0;
+	CorrectLetters = 0;
+	LettersTyped = 0;
+	AccuracyValue = 100;
+
+	GenerateWordsToType(WordsToTypeCount);
+	HighlightExpectedKey(TextToType[0]);
+	UpdateUIValues();
+
+	SetEnabledButtons(true);
+	PlayAnimation(EndScreen, 0, 1, EUMGSequencePlayMode::Reverse);
+}
+
+
+void UKeyboardCanvasManager::OnResetButtonClicked()
+{
+	StopAnimation(BlurOut);
+	SetEnabledButtons(false);
+	PlayAnimation(EndScreen);
+	FTimerHandle UnusedHandle;
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	TimerManager.SetTimer(UnusedHandle, this, &UKeyboardCanvasManager::ResetAllData, 2, false);
 }
 
 
@@ -325,7 +356,8 @@ void UKeyboardCanvasManager::UpdateTimer()
 		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 		TimerManager.ClearTimer(CountDownTimerHandle);
 		SetEnabledButtons(false);
-		UE_LOG(LogTemp, Warning, TEXT("Hello World"));
+		bIsCountDownTimerRunning = false;
+		//UE_LOG(LogTemp, Warning, TEXT("Hello World"));
 	}
 }
 

@@ -8,6 +8,7 @@
 #include "Components/TextBlock.h"
 #include "Components/BackgroundBlur.h"
 #include "Components/Border.h"
+#include "Components/Button.h"
 #include "UKeyboardCanvasManager.generated.h"
 
 /**
@@ -51,8 +52,18 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UBorder* WPMHoverArea;
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* ResetButton;
+
+
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation> BlurOut;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation> EndScreen;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation> ResetBlur;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup Values")
@@ -98,10 +109,14 @@ protected:
 	void HighlightExpectedKey(char);
 	void UpdateTextFieldRed();
 	void RestartTimer(int32, int32);
+	void ResetAllData();
 	void UpdateTimer();
 	void UpdateUIValues();
 
 	FString GetRandomWord();
+
+	UFUNCTION()
+	void OnResetButtonClicked();
 
 	virtual void NativeConstruct() override;
 };

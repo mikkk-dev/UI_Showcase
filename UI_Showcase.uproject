@@ -20,6 +20,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "DataCharts",
+			"Enabled": true
 		}
 	]
 }
