@@ -30,7 +30,7 @@ void UKeyboardButtonWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 	{
 		bool bIsKeyPressed = PC->IsInputKeyDown(KeyToCheck);
 		bool bIsShiftPressed = PC->IsInputKeyDown(EKeys::LeftShift) || PC->IsInputKeyDown(EKeys::RightShift);
-		bool bIsCtrlPressed = PC->IsInputKeyDown(EKeys::LeftControl) || PC->IsInputKeyDown(EKeys::RightControl);
+		bool bIsCtrlPressed = PC->IsInputKeyDown(EKeys::LeftControl) || PC->IsInputKeyDown(EKeys::RightControl); // checking for this because of Ctrl Delete functionality
 		
 		if (bWasKeyPressed != bIsKeyPressed)
 		{

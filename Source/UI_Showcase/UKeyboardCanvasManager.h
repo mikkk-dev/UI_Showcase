@@ -19,7 +19,6 @@ class UI_SHOWCASE_API UKeyboardCanvasManager : public UUserWidget
 {
 	GENERATED_BODY()
 	
-public:
 
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -101,7 +100,7 @@ protected:
 	int32 LettersTyped;
 	int32 CorrectLetters;
 
-	void PrintLetter(FString, bool);
+	void OnKeyboardButtonPress(FString, bool);
 	void SetupButtons();
 	void SetEnabledButtons(bool);
 	void LoadWordsFromStruct();
@@ -115,7 +114,7 @@ protected:
 
 	FString GetRandomWord();
 
-	UFUNCTION()
+	UFUNCTION() // being bound to a button event
 	void OnResetButtonClicked();
 
 	virtual void NativeConstruct() override;

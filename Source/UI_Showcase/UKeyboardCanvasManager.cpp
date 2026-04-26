@@ -66,7 +66,7 @@ void UKeyboardCanvasManager::GenerateWordsToType(int32 Count)
 	ExpectedLetterIndex = 0;
 
 	TextToType = GetRandomWord();
-	int32 LineWidthCounter = TextToType.Len();
+	int32 LineWidthCounter = TextToType.Len(); // this variable is for adding a \n after the amount of characters specified in the inspector
 
 	for (size_t i = 0; i < Count; i++)
 	{
@@ -147,6 +147,7 @@ void UKeyboardCanvasManager::SetupButtons()
 	TArray<UWidget*> AllWidgets;
 	WidgetTree->GetAllWidgets(AllWidgets);
 
+	// gets all UKeyboardButtonWidgets into an array
 	for (UWidget* Widget : AllWidgets)
 	{
 		if (UKeyboardButtonWidget* Button = Cast<UKeyboardButtonWidget>(Widget))
@@ -157,7 +158,7 @@ void UKeyboardCanvasManager::SetupButtons()
 
 	for (auto& Btn : KeyboardButtonsArr)
 	{
-		Btn->LetterSendDelegate.BindUObject(this, &UKeyboardCanvasManager::PrintLetter);
+		Btn->LetterSendDelegate.BindUObject(this, &UKeyboardCanvasManager::OnKeyboardButtonPress);
 	}
 }
 
@@ -171,7 +172,7 @@ void UKeyboardCanvasManager::SetEnabledButtons(bool Enabled)
 }
 
 
-void UKeyboardCanvasManager::PrintLetter(FString KeyStr, bool bIsCtrlPressed) 
+void UKeyboardCanvasManager::OnKeyboardButtonPress(FString KeyStr, bool bIsCtrlPressed)
 {
 	if (!bIsCountDownTimerRunning)
 	{
@@ -372,7 +373,7 @@ void UKeyboardCanvasManager::UpdateUIValues()
 	int32 TimePassed = 15 - CountDownValue;
 	if (TimePassed > 0)
 	{
-		WPMValue = (WordsCount / float(TimePassed)) * 60;
+		WPMValue = (WordsCount / float(TimePassed)) * 60; 
 	}
 	WPMTextBlock->SetText(FText::FromString(FString::FromInt(WPMValue)));
 	
