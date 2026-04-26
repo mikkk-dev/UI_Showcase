@@ -28,6 +28,7 @@ void UKeyboardCanvasManager::ResetAllData()
 	CorrectLetters = 0;
 	LettersTyped = 0;
 	AccuracyValue = 100;
+	CountDownTextBlock->SetText(FText::FromString(TEXT("15")));
 
 	GenerateWordsToType(WordsToTypeCount);
 	HighlightExpectedKey(TextToType[0]);
@@ -45,6 +46,7 @@ void UKeyboardCanvasManager::OnResetButtonClicked()
 	PlayAnimation(EndScreen);
 	FTimerHandle UnusedHandle;
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	TimerManager.ClearTimer(CountDownTimerHandle);
 	TimerManager.SetTimer(UnusedHandle, this, &UKeyboardCanvasManager::ResetAllData, 2, false);
 }
 
